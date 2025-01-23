@@ -18,7 +18,6 @@ async def get_patient_ecg_by_id(patient_id: int = Path(ge=0, lt=21430)) -> EcgRe
     patient_ecg.ecg = get_patient_by_id(patient_id)
     return patient_ecg
 
-
 # Нужно реализовать зависимость от текущего пользователя
 # @router.get("/{user_id}")
 # async def get_last_checked_patient(Depends("get_current_user")) -> EcgReturn:
