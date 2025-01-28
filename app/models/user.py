@@ -8,11 +8,12 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    is_active = Column(Boolean, default=True)
-    last_seen = Column(DateTime)
+    username = Column(String, unique=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    password = Column(String)
     last_checked_patient = Column(Integer, ForeignKey("patients.id"))
-    relationship("Patient", uselist=False, single_parent=True, back_populates="user")
+    patient = relationship("Patient", uselist=False, back_populates="user")
 
 
 

@@ -10,6 +10,7 @@ class Patient(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     parameter = Column(String)
+    x_coord = Column(Integer)
     comments_to_parameter = Column(String)
     verdict = Column(Integer)
-    relationship("User", back_populates="patient")
+    user = relationship("User", back_populates="patient")
