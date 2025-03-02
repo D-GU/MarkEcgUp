@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import DeclarativeBase
 
 engine = create_async_engine(
-    'postgresql+asyncpg://forest:1887@localhost:5432/markecgup',
+    'postgresql+asyncpg://forest:1887@localhost:5432/markecg',
     echo=True
 )
 

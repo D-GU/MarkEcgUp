@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 from typing import Annotated
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -44,7 +44,7 @@ async def authenticate_user(
 
     if (
             not user or
-            not bcrypt_context.verify(password, User.password)
+            not bcrypt_context.verify(password, user.password)
     ):
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
