@@ -77,8 +77,8 @@ async def get_current_user(
             )
 
         return {
-            "username": username,
-            "user_id": user_id
+            "user_id": user_id,
+            "username": username
         }
 
     except ExpiredSignatureError:
@@ -133,6 +133,7 @@ async def login(
         "access_token": token,
         "token_type": "bearer"
     }
+
 
 @router.get("/read_current_user")
 async def read_current_user(

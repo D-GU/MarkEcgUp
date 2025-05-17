@@ -15,8 +15,8 @@ def get_patient_by_id(ecg_id: int = Field(ge=0, le=21430)):
 
     with h5py.File(PATH, "r") as f:
         for lead in range(12):
-            patient_ecg.append(f[str(ecg_id)][str(lead)][:])
-        return np.array(patient_ecg)
+            patient_ecg.append(list(f[str(ecg_id)][str(lead)][:]))
+        return patient_ecg
 
 
 if __name__ == "__main__":

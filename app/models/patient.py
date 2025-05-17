@@ -1,17 +1,30 @@
-from sqlalchemy import ForeignKey, Column, Integer, String
-
+from sqlalchemy.sql import func
+from sqlalchemy import ForeignKey, Column, Integer, String, DateTime, Boolean
+from sqlalchemy.orm import relationship
 from app.backend.db import Base
 
 
 class Patient(Base):
     __tablename__ = "patient"
 
+    # Id fields
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    parameter = Column(String)
-    x_coord = Column(Integer)
-    comments_to_parameter = Column(String)
-    verdict = Column(Integer)
-    last_checked_patient = Column(Integer, default=0)
-    current_patient = Column(Integer, default=0)
-    # user = relationship("User", uselist=False, back_populates="patient")
+
+    # Parameter fields
+    P = Column(Boolean, default=None)
+    Q = Column(Boolean, default=None)
+    R = Column(Boolean, default=None)
+    S = Column(Boolean, default=None)
+    T = Column(Boolean, default=None)
+    P_interval = Column(Boolean, default=None)
+    QRS = Column(Boolean, default=None)
+    T_interval = Column(Boolean, default=None)
+
+    # Record fields
+    sample_id = Column(Integer)
+    comments = Column(String)
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationship field
+    user = relationship("User", back_populates="patient")
