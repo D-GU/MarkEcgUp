@@ -1,6 +1,10 @@
-from typing import List
-
 from pydantic import BaseModel
+
+
+class User(BaseModel):
+    user_id: int
+    username: str
+
 
 class Verdict(BaseModel):
     user_id: str
@@ -18,10 +22,3 @@ class Verdict(BaseModel):
     # Record fields
     sample_id: int
     comments: str
-
-
-class CreateUser(BaseModel):
-    username: str
-    first_name: str
-    last_name: str
-    password: str
