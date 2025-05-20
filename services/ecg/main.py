@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.backend.mongo_db import init_mongo
+from .backend.mongo_db import init_mongo
 from .routers import ecg
 
 

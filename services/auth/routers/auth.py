@@ -1,5 +1,5 @@
-from typing import Annotated
 from datetime import datetime, timedelta
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -55,6 +55,7 @@ async def authenticate_user(
     return user
 
 
+@router.get("/current_user")
 async def get_current_user(
         token: Annotated[str, Depends(oauth2_scheme)]
 ):
@@ -134,9 +135,8 @@ async def login(
         "token_type": "bearer"
     }
 
-
-@router.get("/read_current_user")
-async def read_current_user(
-        user: User = Depends(get_current_user)
-):
-    return {"User": user}
+# @router.get("/read_current_user")
+# async def read_current_user(
+#         user: User = Depends(get_current_user)
+# ):
+#     return {"User": user}

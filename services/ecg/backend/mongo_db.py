@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
-from app.models.ecg import ECG
+from ..models.ecg import ECG
 
 MONGO_URI = "mongodb://localhost:27017"
 DB_NAME = "ecg"

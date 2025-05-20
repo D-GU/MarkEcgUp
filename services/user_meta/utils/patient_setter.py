@@ -4,9 +4,9 @@ from fastapi import Depends, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.backend.dp_depends import get_db
-from app.models.user import User
-from app.routers.auth import get_current_user
+from .user_key import get_current_user
+from ..backend.dp_depends import get_db
+from ..models.user import User
 
 MAX_PATIENTS = 21430
 

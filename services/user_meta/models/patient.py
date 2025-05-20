@@ -1,7 +1,8 @@
 from sqlalchemy.sql import func
 from sqlalchemy import ForeignKey, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
-from app.backend.db import Base
+
+from ..backend.db import Base
 
 
 class Patient(Base):

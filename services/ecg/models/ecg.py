@@ -1,7 +1,7 @@
 from typing import *
 
-import numpy as np
 from beanie import Document
+
 
 class ECG(Document):
     patient_id: int
