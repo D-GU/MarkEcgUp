@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from ..backend.db import Base
-
+from services.user_meta.models import patient
 
 class User(Base):
     __tablename__ = "user"

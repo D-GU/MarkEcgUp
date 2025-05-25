@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 
 from ..backend.db import Base
+from ..models import patient
 
 
 class User(Base):

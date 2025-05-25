@@ -56,7 +56,7 @@ async def post_verdict(
         user: User = Depends(get_current_user),
         verdict: Verdict = Body()
 ) -> dict:
-    user_id = user.get("user_id")
+    user_id = user.user_id
 
     await db.execute(
         insert(Patient).values(
@@ -85,7 +85,7 @@ async def delete_verdict(
         user: User = Depends(get_current_user),
         verdict_id: int = Query()
 ) -> dict:
-    user_id = user.get("user_id")
+    user_id = user.user_id
 
     await db.execute(
         delete(Patient).where(
@@ -105,7 +105,7 @@ async def get_verdicts(
         user: User = Depends(get_current_user),
         sample_id: int = Query(ge=0, le=MAX_PATIENTS)
 ):
-    user_id = user.get("user_id")
+    user_id = user.user_id
 
     verdicts = await db.scalars(
         select(Patient).where(
@@ -122,7 +122,7 @@ async def get_user_verdict(
         user: User = Depends(get_current_user),
         sample_id: int = Query(ge=0, le=MAX_PATIENTS)
 ):
-    user_id = user.get("user_id")
+    user_id = user.user_id
 
     verdict = await db.scalar(
         select(Patient).where(
@@ -132,7 +132,7 @@ async def get_user_verdict(
     )
 
     if not verdict:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND
         )
 

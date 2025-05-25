@@ -12,7 +12,7 @@ MAX_PATIENTS = 21430  # Сделать это переменной окруже�
 
 @router.get("/ecgs", response_model=List[ECG])
 async def get_patient_ecg_and_parameters(
-        # user: User = Depends(get_current_user),
+        user: User = Depends(get_current_user),
         sample_id: int = Query(ge=0, lt=MAX_PATIENTS)
 ):
     patient = await ECG.find({"patient_id": sample_id}).to_list()

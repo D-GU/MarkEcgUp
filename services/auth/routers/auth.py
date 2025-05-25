@@ -46,7 +46,7 @@ async def authenticate_user(
             not user or
             not bcrypt_context.verify(password, user.password)
     ):
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials !",
             headers={"WWW-Authenticate": "Bearer"}
