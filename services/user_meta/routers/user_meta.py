@@ -21,8 +21,9 @@ async def get_last_checked_patient(
         user: User = Depends(get_current_user)
 ):
     try:
-        last_checked_patient = await db.scalar(select(User.last_checked_patient).where(
-            User.id == user.get("user_id")
+        last_checked_patient = await db.scalar(
+            select(User.last_checked_patient).where(
+            User.id == user.user_id
         ))
     except AttributeError:
         raise HTTPException(
@@ -44,7 +45,7 @@ async def get_current_patient(
         user: User = Depends(get_current_user)
 ) -> dict:
     current_patient = await db.scalar(select(User.current_patient).where(
-        User.id == user.get("user_id")
+        User.id == user.user_id
     ))
 
     return {"current_patient": current_patient}
