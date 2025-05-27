@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRES_DB: markecg
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  mongo:
+    image: mongo:6
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+
+  auth:
+    build:
+      context: .
+      dockerfile: services/auth/Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg"
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  ecg:
+    build:
+      context: .
+      dockerfile: services/ecg/Dockerfile
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: "mongodb://mongo:27017"
+      DB_NAME: "ecg"
+    depends_on:
+      - mongo
+    ports:
+      - "8001:8001"
+
+  user_meta:
+    build:
+      context: .
+      dockerfile: services/user_meta/Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg"
+    depends_on:
+      - db
+    ports:
+      - "8002:8002"
+
+volumes:
+  pgdata:
+  mongodata:

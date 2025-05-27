@@ -1,1 +1,0 @@
-ECG_FILE_PATH="...ptbxl.h5"

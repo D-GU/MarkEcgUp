@@ -18,7 +18,7 @@ async def set_current_patient(
 ) -> dict:
     user = await db.scalar(
         select(User).where(
-            User.id == user.get("user_id")
+            User.id == user.user_id
         )
     )
 

@@ -1,6 +1,17 @@
 FROM python:3.11-slim
-WORKDIR /services/auth
-COPY requirements.txt .
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем зависимости и устанавливаем их
+COPY services/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
+
+# Копируем все файлы сервиса
+COPY services ./services
+
+# Открываем порт
+EXPOSE 8000
+
+# Запускаем приложение
 CMD ["uvicorn", "services.auth.main:app", "--host", "127.0.0.1", "--port", "8000"]

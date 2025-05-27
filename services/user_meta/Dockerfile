@@ -1,6 +1,12 @@
 FROM python:3.11-slim
-WORKDIR /services/user_meta
-COPY requirements.txt .
+
+WORKDIR /app
+
+COPY services/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
+
+COPY services ./services
+
+EXPOSE 8002
+
 CMD ["uvicorn", "services.user_meta.main:app", "--host", "127.0.0.1", "--port", "8002"]
