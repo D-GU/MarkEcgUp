@@ -1,6 +1,6 @@
 services:
-  db:
-    image: postgres:15
+  psgr:
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
@@ -8,14 +8,18 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5433:5433"
+      - "5432:5432"
+    networks:
+      - mup
 
   mongo:
     image: mongo:6
     volumes:
       - mongodata:/data/db
     ports:
-      - "27018:27018"
+      - "27017:27017"
+    networks:
+      - mup
 
   auth:
     build:
@@ -24,13 +28,15 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg"
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@localhost:5432/markecg"
     depends_on:
-      - db
+      - psgr
     ports:
       - "8000:8000"
     links:
-      - "db:db"
+      - "psgr:db"
+    networks:
+      - mup
 
   ecg:
     build:
@@ -45,6 +51,8 @@ services:
       - mongo
     ports:
       - "8001:8001"
+    networks:
+      - mup
 
   user_meta:
     build:
@@ -53,12 +61,18 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg"
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@localhost:5432/markecg"
     depends_on:
-      - db
+      - psgr
     ports:
       - "8002:8002"
+    networks:
+      - mup
 
 volumes:
   pgdata:
   mongodata:
+
+networks:
+  mup:
+    driver: bridge
