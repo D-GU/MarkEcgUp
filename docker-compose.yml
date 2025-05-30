@@ -8,14 +8,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5433"
 
   mongo:
     image: mongo:6
     volumes:
       - mongodata:/data/db
     ports:
-      - "27017:27017"
+      - "27018:27018"
 
   auth:
     build:
@@ -29,6 +29,8 @@ services:
       - db
     ports:
       - "8000:8000"
+    links:
+      - "db:db"
 
   ecg:
     build:
