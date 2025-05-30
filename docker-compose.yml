@@ -1,18 +1,18 @@
 services:
   #Nginx service
-#  web:
-#    container_name: web
-#    image: nginx:alpine
-#    depends_on:
-#      - auth
-#      - user_meta
-#      - ecg
-#    ports:
-#      - "8082:80"
-#    volumes:
-#      - ./nginx_conf/conf.d:/etc/nginx/conf.d
-#    networks:
-#      - mup
+  #  web:
+  #    container_name: web
+  #    image: nginx:alpine
+  #    depends_on:
+  #      - auth
+  #      - user_meta
+  #      - ecg
+  #    ports:
+  #      - "8082:80"
+  #    volumes:
+  #      - ./nginx_conf/conf.d:/etc/nginx/conf.d
+  #    networks:
+  #      - mup
 
   # PostgreSQL service
   psgr:
@@ -46,7 +46,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@psgr:5432/markecg
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg$
     depends_on:
       - psgr
     ports:
@@ -68,6 +68,8 @@ services:
       - MONGO_DB_NAME=ecg
     depends_on:
       - mongo
+    links:
+      - "psgr:db"
     ports:
       - "8001:8001"
     networks:
@@ -81,13 +83,13 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@psgr:5432/markecg
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg$
     depends_on:
       - psgr
     ports:
       - "8002:8002"
     links:
-      - psgr
+      - "psgr:db"
     networks:
       - mup
 

@@ -1,12 +1,22 @@
 FROM python:3.11-slim
 
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
+# Копируем зависимости и устанавливаем их
 COPY services/requirements.txt .
+
+# Устанавливаем нужные инструменты
+# RUN apt-get update && apt-get install -y libpq-dev build-essential
+
+# Установка зависимостей
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Копируем все файлы сервиса
 COPY services ./services
 
+# Открываем порт
 EXPOSE 8001
 
-CMD ["uvicorn", "services.ecg.main:app", "--host", "127.0.0.1", "--port", "8001"]
+# Запускаем приложение
+CMD ["uvicorn", "services.ecg.main:app", "--host", "0.0.0.0", "--port", "8001"]

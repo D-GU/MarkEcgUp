@@ -5,6 +5,11 @@ WORKDIR /app
 
 # Копируем зависимости и устанавливаем их
 COPY services/requirements.txt .
+
+# Устанавливаем нужные инструменты
+# RUN apt-get update && apt-get install -y libpq-dev build-essential
+
+# Установка зависимостей
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем все файлы сервиса
@@ -14,4 +19,4 @@ COPY services ./services
 EXPOSE 8000
 
 # Запускаем приложение
-CMD ["uvicorn", "services.auth.main:app", "--host", "127.0.0.1", "--port", "8000"]
+CMD ["uvicorn", "services.auth.main:app", "--host", "0.0.0.0", "--port", "8000"]

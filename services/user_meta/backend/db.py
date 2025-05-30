@@ -8,7 +8,7 @@ from sqlalchemy.orm import DeclarativeBase
 
 load_dotenv(".env")
 POSTGRES_URL = os.getenv(
-    "PSGR_URL",
+    "DATABASE_URL",
     default="postgresql+asyncpg://forest:1887@localhost:5432/markecg"
 )
 
