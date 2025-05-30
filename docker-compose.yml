@@ -1,18 +1,18 @@
 services:
   #Nginx service
-  web:
-    container_name: web
-    image: nginx:alpine
-    depends_on:
-      - auth
-      - user_meta
-      - ecg
-    ports:
-      - "8082:80"
-    volumes:
-      - ./nginx_conf/conf.d:/etc/nginx/conf.d
-    networks:
-      - mup
+#  web:
+#    container_name: web
+#    image: nginx:alpine
+#    depends_on:
+#      - auth
+#      - user_meta
+#      - ecg
+#    ports:
+#      - "8082:80"
+#    volumes:
+#      - ./nginx_conf/conf.d:/etc/nginx/conf.d
+#    networks:
+#      - mup
 
   # PostgreSQL service
   psgr:
@@ -64,7 +64,7 @@ services:
     env_file:
       - .env
     environment:
-      - MONGODB_URL=mongodb://mongo
+      - MONGODB_URL=mongodb://mongo:27017
       - MONGO_DB_NAME=ecg
     depends_on:
       - mongo
