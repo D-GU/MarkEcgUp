@@ -1,10 +1,26 @@
 services:
+  #Nginx service
+  web:
+    container_name: web
+    image: nginx:alpine
+    depends_on:
+      - auth
+      - user_meta
+      - ecg
+    ports:
+      - "8082:80"
+    volumes:
+      - ./nginx_conf/conf.d:/etc/nginx/conf.d
+    networks:
+      - mup
+
+  # PostgreSQL service
   psgr:
-    image: postgres:16-alpine
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-      POSTGRES_DB: markecg
+      POSTGRES_DB: ${POSTGRESDB_NAME}$
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -12,6 +28,7 @@ services:
     networks:
       - mup
 
+  # Mongo Service
   mongo:
     image: mongo:6
     volumes:
@@ -21,6 +38,7 @@ services:
     networks:
       - mup
 
+  # Authentication service
   auth:
     build:
       context: .
@@ -28,7 +46,7 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@localhost:5432/markecg"
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@psgr:5432/markecg
     depends_on:
       - psgr
     ports:
@@ -38,6 +56,7 @@ services:
     networks:
       - mup
 
+  # Ecg managing service
   ecg:
     build:
       context: .
@@ -45,8 +64,8 @@ services:
     env_file:
       - .env
     environment:
-      MONGO_URI: "mongodb://mongo:27017"
-      DB_NAME: "ecg"
+      - MONGODB_URL=mongodb://mongo
+      - MONGO_DB_NAME=ecg
     depends_on:
       - mongo
     ports:
@@ -54,6 +73,7 @@ services:
     networks:
       - mup
 
+  # User metadata service
   user_meta:
     build:
       context: .
@@ -61,18 +81,22 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: "postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@localhost:5432/markecg"
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@psgr:5432/markecg
     depends_on:
       - psgr
     ports:
       - "8002:8002"
+    links:
+      - psgr
     networks:
       - mup
 
+# Volumes
 volumes:
   pgdata:
   mongodata:
 
+# Networks
 networks:
   mup:
     driver: bridge
