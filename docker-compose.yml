@@ -46,7 +46,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg$
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg
     depends_on:
       - psgr
     ports:
@@ -83,7 +83,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg$
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg
     depends_on:
       - psgr
     ports:
