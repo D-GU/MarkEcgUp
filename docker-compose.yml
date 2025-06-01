@@ -70,6 +70,7 @@ services:
       - MONGO_DB_NAME=ecg
     depends_on:
       - mongo
+      - auth
     links:
       - "psgr:db"
     ports:
@@ -88,6 +89,7 @@ services:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/${POSTGRESDB_NAME}
     depends_on:
       - psgr
+      - auth
     ports:
       - "8002:8002"
     links:

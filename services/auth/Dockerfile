@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем все файлы сервиса
 COPY services ./services
+ADD ../../alembic.ini .
 
 # Открываем порт
 EXPOSE 8000
