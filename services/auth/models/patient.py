@@ -3,7 +3,7 @@ from sqlalchemy import ForeignKey, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 
 from ..backend.db import Base
-
+from ..models import user
 
 class Patient(Base):
     __tablename__ = "patient"

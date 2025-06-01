@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${POSTGRESQL_PASSWORD}
-      POSTGRES_DB: ${POSTGRESDB_NAME}$
+      POSTGRES_DB: ${POSTGRESDB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -38,6 +38,8 @@ services:
     networks:
       - mup
 
+  # Сервис для запуска миграций
+
   # Authentication service
   auth:
     build:
@@ -46,7 +48,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/${POSTGRESDB_NAME}
     depends_on:
       - psgr
     ports:
@@ -83,7 +85,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/markecg
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}@db:5432/${POSTGRESDB_NAME}
     depends_on:
       - psgr
     ports:
