@@ -9,7 +9,7 @@ from ..schemas import User
 
 # Используем OAuth2 Password Bearer схему для получения токена
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="http://127.0.0.1:8000/auth/token"
+    tokenUrl="http://localhost:8000/auth/token"
 )
 
 
@@ -19,7 +19,7 @@ async def get_current_user(
     try:
         async with AsyncClient(timeout=5.0) as client:
             response = await client.get(
-                "http://127.0.0.1:8000/auth/current_user",
+                "http://localhost:8000/auth/current_user",
                 headers={"Authorization": f"Bearer {token}"}
             )
             response.raise_for_status()

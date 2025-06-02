@@ -1,6 +1,8 @@
+import os
 from datetime import datetime, timedelta
 from typing import Annotated
 
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, ExpiredSignatureError, JWTError
@@ -12,8 +14,10 @@ from ..backend.dp_depends import get_db
 from ..models.user import User
 from ..schemas import CreateUser
 
-SECRET_KEY = "d7cf7b96b36d91f32a5d89b7e2b8ebf06a2968d25727239ba529d28384710f0c"
-ALGORITHM = "HS256"
+load_dotenv(".env")
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -23,7 +27,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 async def create_token(
         username: str,
         user_id: int,
-        expires_delta: timedelta
+        expires_delta: timedelta,
+        secret_key: str,
+        algorithm: str
 ):
     encode = {
         "username": username,
@@ -33,7 +39,7 @@ async def create_token(
     expires = datetime.now() + expires_delta
     encode.update({"exp": expires})
 
-    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(encode, secret_key, algorithm=algorithm)
 
 
 async def authenticate_user(
@@ -127,16 +133,12 @@ async def login(
     token = await create_token(
         user.username,
         user.id,
-        expires_delta=timedelta(minutes=20)
+        expires_delta=timedelta(minutes=20),
+        secret_key=SECRET_KEY,
+        algorithm=ALGORITHM
     )
 
     return {
         "access_token": token,
         "token_type": "bearer"
     }
-
-# @router.get("/read_current_user")
-# async def read_current_user(
-#         user: User = Depends(get_current_user)
-# ):
-#     return {"User": user}

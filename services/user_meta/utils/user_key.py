@@ -1,11 +1,18 @@
+import os
 from typing import Any
 
+from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from httpx import AsyncClient, HTTPError
 from pydantic import ValidationError
 
 from ..schemas import User
+
+load_dotenv(".env")
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
 
 # Используем OAuth2 Password Bearer схему для получения токена
 oauth2_scheme = OAuth2PasswordBearer(
@@ -15,12 +22,14 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 async def get_current_user(
         token: str = Depends(oauth2_scheme)
-) -> User:
+) -> User
     try:
         async with AsyncClient(timeout=5.0) as client:
             response = await client.get(
                 "http://127.0.0.1:8000/auth/current_user",
-                headers={"Authorization": f"Bearer {token}"}
+                headers={
+                    "Authorization": f"Bearer {token}",
+                }
             )
             response.raise_for_status()
     except HTTPError:
