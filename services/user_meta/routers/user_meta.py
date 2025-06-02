@@ -23,8 +23,8 @@ async def get_last_checked_patient(
     try:
         last_checked_patient = await db.scalar(
             select(User.last_checked_patient).where(
-            User.id == user.user_id
-        ))
+                User.id == user.user_id
+            ))
     except AttributeError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -34,7 +34,6 @@ async def get_last_checked_patient(
     await set_current_patient(db, user, last_checked_patient)
 
     return {
-        "User": user,
         "last_checked_patient": last_checked_patient
     }
 

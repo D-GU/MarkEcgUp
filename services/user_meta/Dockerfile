@@ -11,6 +11,7 @@ COPY services/requirements.txt .
 
 # Установка зависимостей
 RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get -y update; apt-get -y install curl
 
 # Копируем все файлы сервиса
 COPY services ./services

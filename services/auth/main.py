@@ -1,8 +1,16 @@
+import os
+
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from services.auth.routers import auth
+
+load_dotenv(".env")
+
+ECG_ADDRESS = os.getenv("ECG_ADDRESS")
+USER_META_ADDRESS = os.getenv("USER_META_ADDRESS")
 
 origins = [
     "http://127.0.0.1:8001",
