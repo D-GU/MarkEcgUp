@@ -1,21 +1,24 @@
+import os
 from typing import Annotated
 
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, Query, HTTPException, status, Body
 from sqlalchemy import select, insert, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..backend.dp_depends import get_db
 from ..models.patient import Patient
-from ..models.user import User
-from ..schemas import Verdict
+from ..schemas import User, Verdict
 from ..utils.patient_setter import set_current_patient
 from ..utils.user_key import get_current_user
 
+load_dotenv(".env")
+
 router = APIRouter(prefix="/user_meta", tags=["user_meta"])
-MAX_PATIENTS = 21429
+MAX_PATIENTS = os.getenv("MAX_PATIENTS")
 
 
-@router.get("/patients")
+@router.get("/patients/last_checked_patient")
 async def get_last_checked_patient(
         db: Annotated[AsyncSession, Depends(get_db)],
         user: User = Depends(get_current_user)
@@ -38,7 +41,7 @@ async def get_last_checked_patient(
     }
 
 
-@router.get("/patients")
+@router.get("/patients/current_patient")
 async def get_current_patient(
         db: Annotated[AsyncSession, Depends(get_db)],
         user: User = Depends(get_current_user)

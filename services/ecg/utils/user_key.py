@@ -4,13 +4,15 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, ExpiredSignatureError, JWTError
 
+from ..schemas import User
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://127.0.0.1:8000/auth/token")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict[str, int | str]:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("username")
@@ -29,10 +31,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict[str, int
                 detail="No access token supplied !"
             )
 
-        return {
-            "user_id": user_id,
-            "username": username
-        }
+        return User(user_id=user_id, username=username)
 
     except ExpiredSignatureError:
         raise HTTPException(

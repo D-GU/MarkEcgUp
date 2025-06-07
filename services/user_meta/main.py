@@ -3,7 +3,7 @@ import uvicorn
 
 from services.user_meta.routers import user_meta
 
-app = FastAPI()
+app = FastAPI(docs_url="")
 
 
 @app.get("/")

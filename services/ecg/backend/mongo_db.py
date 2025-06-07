@@ -3,7 +3,7 @@ import os
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from ..models.ecg import ECG
+from ..models.ecgs import ECG
 
 MONGO_URL = os.getenv(
     "MONGODB_URL",
